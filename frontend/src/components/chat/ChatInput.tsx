@@ -5,7 +5,6 @@ import { Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
 import { useSpaceStore } from '@/stores/spaceStore';
-import { useUserStore } from '@/stores/userStore';
 import { toast } from 'sonner';
 
 interface ChatInputProps {
@@ -16,7 +15,6 @@ export default function ChatInput({ spaceId }: ChatInputProps) {
   const [content, setContent] = useState('');
   const [sending, setSending] = useState(false);
   const addMessage = useSpaceStore((s) => s.addMessage);
-  const user = useUserStore((s) => s.user);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   async function handleSend() {

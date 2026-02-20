@@ -210,6 +210,7 @@ export default function CreatePinModal({ open, onClose, boardId }: CreatePinModa
             </div>
             {imageUrl && (
               <div className="rounded-xl overflow-hidden border border-border/50 max-h-48">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={imageUrl}
                   alt="Preview"

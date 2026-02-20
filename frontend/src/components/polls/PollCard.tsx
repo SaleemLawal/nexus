@@ -15,7 +15,7 @@ interface PollCardProps {
   currentUserId?: string;
 }
 
-export default function PollCard({ poll, currentUserId }: PollCardProps) {
+export default function PollCard({ poll }: PollCardProps) {
   const updatePoll = useSpaceStore((s) => s.updatePoll);
   const [loading, setLoading] = useState<string | null>(null);
 

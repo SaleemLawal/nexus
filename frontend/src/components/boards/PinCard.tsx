@@ -86,6 +86,7 @@ export default function PinCard({ pin }: PinCardProps) {
       {/* Image */}
       {pin.type === 'image' && pin.image_url && (
         <div className="relative overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={pin.image_url}
             alt={pin.title || 'Pin image'}

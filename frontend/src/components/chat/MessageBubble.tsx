@@ -61,6 +61,7 @@ export default function MessageBubble({ message, isOwn, showAvatar }: MessageBub
           )}
         >
           {message.message_type === 'image' ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={message.content}
               alt="Image"
