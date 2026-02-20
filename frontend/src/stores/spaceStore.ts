@@ -122,7 +122,10 @@ export const useSpaceStore = create<SpaceState>()((set) => ({
   },
 
   addMessage: (message) =>
-    set((s) => ({ messages: [...s.messages, message] })),
+    set((s) => {
+      if (s.messages.some((m) => m.id === message.id)) return s;
+      return { messages: [...s.messages, message] };
+    }),
 
   fetchEvents: async (spaceID) => {
     const events = await api.events.list(spaceID);

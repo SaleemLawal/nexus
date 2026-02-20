@@ -22,7 +22,7 @@ export default function SpaceLayout({ children }: { children: React.ReactNode })
   return (
     <>
       <SpaceTopNav spaceID={spaceId} />
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      <main className="flex-1 overflow-hidden flex flex-col">{children}</main>
     </>
   );
 }

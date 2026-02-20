@@ -14,6 +14,7 @@ import {
   SortableContext,
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
+import { motion } from 'framer-motion';
 import { api } from '@/lib/api';
 import { Pin } from '@/types';
 import { Layers } from 'lucide-react';
@@ -55,9 +56,19 @@ export default function PinGrid({ boardId }: PinGridProps) {
   if (pins.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <Layers className="w-10 h-10 text-muted-foreground/30 mb-3" />
-        <p className="text-muted-foreground text-sm">No pins yet</p>
-        <p className="text-muted-foreground/60 text-xs mt-1">
+        <div
+          className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
+          style={{ background: '#FEF3EF' }}
+        >
+          <Layers className="w-6 h-6" style={{ color: '#D4654A88' }} />
+        </div>
+        <p className="font-display font-600 text-sm" style={{ color: 'oklch(0.40 0.03 52)' }}>
+          No pins yet
+        </p>
+        <p
+          className="font-editorial text-sm mt-1"
+          style={{ color: 'oklch(0.60 0.025 58)', fontStyle: 'italic' }}
+        >
           Add your first pin to start collecting ideas
         </p>
       </div>
@@ -72,10 +83,20 @@ export default function PinGrid({ boardId }: PinGridProps) {
     >
       <SortableContext items={pins.map((p) => p.id)} strategy={rectSortingStrategy}>
         <div className="masonry-grid">
-          {pins.map((pin) => (
-            <div key={pin.id} className="masonry-item">
+          {pins.map((pin, i) => (
+            <motion.div
+              key={pin.id}
+              className="masonry-item"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.4,
+                delay: Math.min(i * 0.06, 0.48),
+                ease: 'easeOut',
+              }}
+            >
               <PinCard pin={pin} />
-            </div>
+            </motion.div>
           ))}
         </div>
       </SortableContext>

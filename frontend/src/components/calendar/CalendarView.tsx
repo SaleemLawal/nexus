@@ -35,8 +35,7 @@ export default function CalendarView({ events, onAddEvent }: CalendarViewProps) 
   const monthEnd = endOfMonth(currentMonth);
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
-  // Padding for day-of-week offset
-  const startPadding = getDay(monthStart); // 0=Sun
+  const startPadding = getDay(monthStart);
   const paddingDays = Array.from({ length: startPadding });
 
   function getEventsForDay(day: Date) {
@@ -56,25 +55,56 @@ export default function CalendarView({ events, onAddEvent }: CalendarViewProps) 
   }
 
   return (
-    <div className="space-y-6">
-      {/* Month navigation */}
-      <div className="glass rounded-2xl border border-border/50 overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border/50">
-          <Button variant="ghost" size="icon" onClick={() => setCurrentMonth((m) => subMonths(m, 1))}>
+    <div className="space-y-5">
+      {/* Calendar card */}
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{
+          background: '#fff',
+          border: '1px solid oklch(0.88 0.015 68)',
+          boxShadow: '0 2px 8px oklch(0.22 0.03 52 / 4%), 0 4px 16px oklch(0.22 0.03 52 / 5%)',
+        }}
+      >
+        {/* Month navigation */}
+        <div
+          className="flex items-center justify-between px-6 py-4"
+          style={{ borderBottom: '1px solid oklch(0.90 0.012 68)' }}
+        >
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setCurrentMonth((m) => subMonths(m, 1))}
+            className="w-8 h-8"
+          >
             <ChevronLeft className="w-4 h-4" />
           </Button>
-          <h3 className="text-base font-semibold text-foreground">
+          <h3
+            className="font-display font-700 text-base"
+            style={{ color: 'oklch(0.22 0.03 52)' }}
+          >
             {format(currentMonth, 'MMMM yyyy')}
           </h3>
-          <Button variant="ghost" size="icon" onClick={() => setCurrentMonth((m) => addMonths(m, 1))}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setCurrentMonth((m) => addMonths(m, 1))}
+            className="w-8 h-8"
+          >
             <ChevronRight className="w-4 h-4" />
           </Button>
         </div>
 
         {/* Day headers */}
-        <div className="grid grid-cols-7 border-b border-border/30">
+        <div
+          className="grid grid-cols-7"
+          style={{ borderBottom: '1px solid oklch(0.92 0.012 68)' }}
+        >
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
-            <div key={d} className="text-center text-xs font-semibold text-muted-foreground py-2">
+            <div
+              key={d}
+              className="text-center font-display text-xs font-600 py-2.5"
+              style={{ color: 'oklch(0.60 0.025 58)' }}
+            >
               {d}
             </div>
           ))}
@@ -83,7 +113,11 @@ export default function CalendarView({ events, onAddEvent }: CalendarViewProps) 
         {/* Days grid */}
         <div className="grid grid-cols-7">
           {paddingDays.map((_, i) => (
-            <div key={`pad-${i}`} className="min-h-[80px] border-border/20 border-b border-r" />
+            <div
+              key={`pad-${i}`}
+              className="min-h-[80px]"
+              style={{ borderBottom: '1px solid oklch(0.93 0.010 68)', borderRight: '1px solid oklch(0.93 0.010 68)' }}
+            />
           ))}
           {days.map((day) => {
             const dayEvents = getEventsForDay(day);
@@ -95,21 +129,37 @@ export default function CalendarView({ events, onAddEvent }: CalendarViewProps) 
               <div
                 key={day.toISOString()}
                 className={cn(
-                  'min-h-[80px] p-1.5 border-b border-r border-border/20 cursor-pointer transition-colors group relative',
-                  isSelected ? 'bg-primary/10' : 'hover:bg-secondary/30',
+                  'min-h-[80px] p-1.5 cursor-pointer transition-colors group relative',
                 )}
+                style={{
+                  borderBottom: '1px solid oklch(0.93 0.010 68)',
+                  borderRight: '1px solid oklch(0.93 0.010 68)',
+                  background: isSelected ? '#FEF3EF' : 'transparent',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSelected) {
+                    (e.currentTarget as HTMLDivElement).style.background = 'oklch(0.96 0.009 70)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSelected) {
+                    (e.currentTarget as HTMLDivElement).style.background = 'transparent';
+                  }
+                }}
                 onClick={() => setSelectedDay(isSelected ? null : day)}
               >
                 <div className="flex items-center justify-between mb-1">
                   <span
-                    className={cn(
-                      'text-xs w-6 h-6 flex items-center justify-center rounded-full font-medium',
-                      isToday
-                        ? 'bg-primary text-primary-foreground'
+                    className="font-display text-xs w-6 h-6 flex items-center justify-center rounded-full font-500"
+                    style={{
+                      background: isToday ? '#D4654A' : 'transparent',
+                      color: isToday
+                        ? '#fff'
                         : isCurrentMonth
-                        ? 'text-foreground'
-                        : 'text-muted-foreground/40',
-                    )}
+                        ? 'oklch(0.30 0.03 52)'
+                        : 'oklch(0.70 0.02 68)',
+                      fontWeight: isToday ? 700 : 500,
+                    }}
                   >
                     {format(day, 'd')}
                   </span>
@@ -118,7 +168,16 @@ export default function CalendarView({ events, onAddEvent }: CalendarViewProps) 
                       e.stopPropagation();
                       onAddEvent(day);
                     }}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-primary/20 text-muted-foreground hover:text-primary"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded"
+                    style={{ color: 'oklch(0.55 0.025 58)' }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.background = '#FEF3EF';
+                      (e.currentTarget as HTMLButtonElement).style.color = '#D4654A';
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
+                      (e.currentTarget as HTMLButtonElement).style.color = 'oklch(0.55 0.025 58)';
+                    }}
                   >
                     <Plus className="w-3 h-3" />
                   </button>
@@ -128,9 +187,9 @@ export default function CalendarView({ events, onAddEvent }: CalendarViewProps) 
                   {dayEvents.slice(0, 3).map((event) => (
                     <div
                       key={event.id}
-                      className="text-[10px] rounded px-1 py-0.5 truncate font-medium"
+                      className="font-display text-[10px] rounded px-1 py-0.5 truncate font-600"
                       style={{
-                        backgroundColor: `${event.color}33`,
+                        backgroundColor: `${event.color}22`,
                         color: event.color,
                       }}
                     >
@@ -138,7 +197,10 @@ export default function CalendarView({ events, onAddEvent }: CalendarViewProps) 
                     </div>
                   ))}
                   {dayEvents.length > 3 && (
-                    <div className="text-[10px] text-muted-foreground pl-1">
+                    <div
+                      className="font-display text-[10px] pl-1"
+                      style={{ color: 'oklch(0.55 0.025 58)' }}
+                    >
                       +{dayEvents.length - 3} more
                     </div>
                   )}
@@ -151,50 +213,93 @@ export default function CalendarView({ events, onAddEvent }: CalendarViewProps) 
 
       {/* Selected day events */}
       {selectedDay && (
-        <div className="glass rounded-2xl border border-border/50 p-5">
+        <div
+          className="rounded-2xl p-5"
+          style={{
+            background: '#fff',
+            border: '1px solid oklch(0.88 0.015 68)',
+            boxShadow: '0 2px 8px oklch(0.22 0.03 52 / 4%)',
+          }}
+        >
           <div className="flex items-center justify-between mb-4">
-            <h4 className="font-semibold text-foreground">
+            <h4
+              className="font-display font-700 text-sm"
+              style={{ color: 'oklch(0.22 0.03 52)' }}
+            >
               {format(selectedDay, 'EEEE, MMMM d')}
             </h4>
-            <Button
-              size="sm"
-              variant="ghost"
+            <button
               onClick={() => onAddEvent(selectedDay)}
-              className="gap-1.5 text-muted-foreground hover:text-foreground"
+              className="flex items-center gap-1.5 font-display text-xs font-600 px-3 py-1.5 rounded-lg transition-colors"
+              style={{ color: '#D4654A', background: '#FEF3EF' }}
             >
               <Plus className="w-3.5 h-3.5" />
               Add event
-            </Button>
+            </button>
           </div>
           {selectedDayEvents.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No events this day</p>
+            <p
+              className="font-editorial text-sm"
+              style={{ color: 'oklch(0.55 0.025 58)', fontStyle: 'italic' }}
+            >
+              No events this day
+            </p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {selectedDayEvents.map((event) => (
                 <div
                   key={event.id}
-                  className="flex items-start gap-3 p-3 rounded-xl border border-border/50 hover:border-primary/30 transition-colors group"
+                  className="flex items-start gap-3 p-3 rounded-xl group transition-all"
+                  style={{
+                    background: 'oklch(0.97 0.006 70)',
+                    border: '1px solid oklch(0.90 0.012 68)',
+                  }}
                 >
                   <div
                     className="w-1 self-stretch rounded-full shrink-0 mt-0.5"
                     style={{ backgroundColor: event.color }}
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground text-sm">{event.title}</p>
+                    <p
+                      className="font-display font-600 text-sm"
+                      style={{ color: 'oklch(0.22 0.03 52)' }}
+                    >
+                      {event.title}
+                    </p>
                     {event.description && (
-                      <p className="text-xs text-muted-foreground mt-0.5">{event.description}</p>
+                      <p
+                        className="font-editorial text-xs mt-0.5"
+                        style={{ color: 'oklch(0.50 0.025 58)' }}
+                      >
+                        {event.description}
+                      </p>
                     )}
                     {event.location && (
-                      <p className="text-xs text-muted-foreground/70 mt-0.5">📍 {event.location}</p>
+                      <p
+                        className="font-display text-xs mt-0.5"
+                        style={{ color: 'oklch(0.60 0.02 68)' }}
+                      >
+                        📍 {event.location}
+                      </p>
                     )}
-                    <p className="text-xs text-muted-foreground/70 mt-1">
+                    <p
+                      className="font-display text-xs mt-1"
+                      style={{ color: 'oklch(0.60 0.025 58)' }}
+                    >
                       {format(new Date(event.starts_at), 'h:mm a')}
                       {event.ends_at && ` – ${format(new Date(event.ends_at), 'h:mm a')}`}
                     </p>
                   </div>
                   <button
                     onClick={() => handleDelete(event.id)}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-lg hover:bg-destructive/20 text-muted-foreground hover:text-destructive shrink-0"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-lg shrink-0"
+                    style={{ color: 'oklch(0.55 0.22 25)' }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.background = 'oklch(0.65 0.22 25 / 12%)';
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
+                    }}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>

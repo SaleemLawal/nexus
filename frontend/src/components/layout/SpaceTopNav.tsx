@@ -40,40 +40,65 @@ export default function SpaceTopNav({ spaceID }: SpaceTopNavProps) {
   if (!currentSpace) return null;
 
   return (
-    <header className="h-14 border-b border-border flex items-center justify-between px-6 shrink-0 bg-background/80 backdrop-blur-sm">
-      <div className="flex items-center gap-2">
-        <span className="text-xl">{currentSpace.emoji}</span>
-        <h1 className="font-semibold text-foreground">{currentSpace.name}</h1>
+    <header
+      className="h-14 flex items-center justify-between px-6 shrink-0"
+      style={{
+        background: '#fff',
+        borderBottom: '1px solid oklch(0.88 0.015 68)',
+        boxShadow: '0 1px 0 oklch(0.88 0.015 68)',
+      }}
+    >
+      <div className="flex items-center gap-2.5">
+        <span className="text-xl leading-none">{currentSpace.emoji}</span>
+        <h1
+          className="font-display font-700 text-base"
+          style={{ color: 'oklch(0.22 0.03 52)' }}
+        >
+          {currentSpace.name}
+        </h1>
         {currentSpace.description && (
-          <span className="text-sm text-muted-foreground hidden md:block">
+          <span
+            className="font-editorial text-sm hidden md:block"
+            style={{ color: 'oklch(0.55 0.025 58)', fontStyle: 'italic' }}
+          >
             — {currentSpace.description}
           </span>
         )}
       </div>
-      <div className="flex items-center gap-3">
+
+      <div className="flex items-center gap-2">
         <PresenceIndicator spaceID={spaceID} />
-        <Button
-          variant="ghost"
-          size="sm"
+
+        <button
           onClick={handleShowMembers}
-          className="gap-1.5 text-muted-foreground hover:text-foreground"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-display text-xs font-500 transition-colors"
+          style={{ color: 'oklch(0.50 0.025 58)' }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.background = 'oklch(0.93 0.012 72)';
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
+          }}
         >
-          <Users className="w-4 h-4" />
-          <span className="text-xs">{currentSpace.member_count ?? 0}</span>
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
+          <Users className="w-3.5 h-3.5" />
+          <span>{currentSpace.member_count ?? 0}</span>
+        </button>
+
+        <button
           onClick={copyInvite}
-          className="gap-1.5 text-muted-foreground hover:text-foreground"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-display text-xs font-600 transition-all"
+          style={{
+            background: copied ? '#EDFAF7' : '#FEF3EF',
+            color: copied ? '#3B9E8C' : '#D4654A',
+          }}
         >
           {copied ? (
-            <Check className="w-4 h-4 text-green-400" />
+            <Check className="w-3.5 h-3.5" />
           ) : (
-            <Copy className="w-4 h-4" />
+            <Copy className="w-3.5 h-3.5" />
           )}
-          <span className="text-xs hidden md:inline">Invite</span>
-        </Button>
+          <span className="hidden md:inline">{copied ? 'Copied!' : 'Invite'}</span>
+        </button>
       </div>
 
       {/* Members popover */}
@@ -83,8 +108,18 @@ export default function SpaceTopNav({ spaceID }: SpaceTopNavProps) {
             className="fixed inset-0 z-40"
             onClick={() => setShowMembers(false)}
           />
-          <div className="absolute right-4 top-14 z-50 bg-card border border-border rounded-xl shadow-xl p-4 w-64">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+          <div
+            className="absolute right-4 top-14 z-50 rounded-xl p-4 w-64"
+            style={{
+              background: '#fff',
+              border: '1px solid oklch(0.88 0.015 68)',
+              boxShadow: '0 8px 32px oklch(0.22 0.03 52 / 12%)',
+            }}
+          >
+            <p
+              className="font-display text-xs font-700 uppercase tracking-widest mb-3"
+              style={{ color: 'oklch(0.55 0.025 58)' }}
+            >
               Members
             </p>
             <MemberAvatars members={members} />
