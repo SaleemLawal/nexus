@@ -24,8 +24,8 @@ export default function MessageBubble({ message, isOwn, showAvatar }: MessageBub
       {/* Avatar */}
       {showAvatar ? (
         <div
-          className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5"
-          style={{ backgroundColor: user?.avatar_color || '#6366f1' }}
+          className="w-8 h-8 rounded-full flex items-center justify-center text-white font-display text-xs font-700 shrink-0 mt-0.5"
+          style={{ backgroundColor: user?.avatar_color || '#D4654A' }}
         >
           {user?.display_name?.[0]?.toUpperCase() || '?'}
         </div>
@@ -42,10 +42,16 @@ export default function MessageBubble({ message, isOwn, showAvatar }: MessageBub
               isOwn && 'flex-row-reverse',
             )}
           >
-            <span className="text-xs font-semibold text-foreground">
+            <span
+              className="font-display text-xs font-600"
+              style={{ color: 'oklch(0.25 0.03 52)' }}
+            >
               {user?.display_name || 'Unknown'}
             </span>
-            <span className="text-[10px] text-muted-foreground">
+            <span
+              className="font-display text-[10px]"
+              style={{ color: 'oklch(0.60 0.025 58)' }}
+            >
               {formatRelative(message.created_at)}
             </span>
           </div>
@@ -53,12 +59,24 @@ export default function MessageBubble({ message, isOwn, showAvatar }: MessageBub
 
         {/* Bubble */}
         <div
-          className={cn(
-            'px-3 py-2 rounded-2xl text-sm leading-relaxed',
+          className="px-3.5 py-2.5 rounded-2xl font-editorial text-sm leading-relaxed"
+          style={
             isOwn
-              ? 'bg-primary text-primary-foreground rounded-tr-sm'
-              : 'bg-secondary text-foreground rounded-tl-sm',
-          )}
+              ? {
+                  background: '#D4654A',
+                  color: '#fff',
+                  borderBottomRightRadius: '4px',
+                  fontWeight: 400,
+                }
+              : {
+                  background: '#fff',
+                  color: 'oklch(0.25 0.03 52)',
+                  borderBottomLeftRadius: '4px',
+                  border: '1px solid oklch(0.88 0.015 68)',
+                  boxShadow: '0 1px 4px oklch(0.22 0.03 52 / 5%)',
+                  fontWeight: 400,
+                }
+          }
         >
           {message.message_type === 'image' ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -69,7 +87,7 @@ export default function MessageBubble({ message, isOwn, showAvatar }: MessageBub
               loading="lazy"
             />
           ) : (
-            <span className="whitespace-pre-wrap break-words">{message.content}</span>
+            <span className="whitespace-pre-wrap wrap-break-word">{message.content}</span>
           )}
         </div>
       </div>

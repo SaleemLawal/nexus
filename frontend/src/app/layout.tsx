@@ -1,16 +1,21 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Bricolage_Grotesque, Newsreader } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const bricolage = Bricolage_Grotesque({
+  variable: '--font-bricolage',
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const newsreader = Newsreader({
+  variable: '--font-newsreader',
   subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  style: ['normal', 'italic'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -25,9 +30,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="light" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${bricolage.variable} ${newsreader.variable} antialiased`}
       >
         {children}
         <Toaster richColors position="top-right" />

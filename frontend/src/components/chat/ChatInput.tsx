@@ -2,7 +2,6 @@
 
 import { useState, useRef } from 'react';
 import { Send } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
 import { useSpaceStore } from '@/stores/spaceStore';
 import { toast } from 'sonner';
@@ -24,7 +23,6 @@ export default function ChatInput({ spaceId }: ChatInputProps) {
     setContent('');
     try {
       const msg = await api.messages.create(spaceId, { content: text });
-      // De-dupe: Realtime might also deliver it
       addMessage(msg);
     } catch {
       toast.error('Failed to send message');
@@ -50,13 +48,26 @@ export default function ChatInput({ spaceId }: ChatInputProps) {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Message... (Enter to send, Shift+Enter for new line)"
+          placeholder="Message… (Enter to send, Shift+Enter for new line)"
           rows={1}
-          className="w-full resize-none bg-secondary/50 border border-border/50 rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all"
+          className="w-full resize-none rounded-xl px-4 py-3 font-editorial text-sm focus:outline-none transition-all"
           style={{
             minHeight: '44px',
             maxHeight: '120px',
             height: 'auto',
+            background: '#fff',
+            border: '1px solid oklch(0.88 0.015 68)',
+            color: 'oklch(0.22 0.03 52)',
+            fontWeight: 400,
+            boxShadow: '0 1px 4px oklch(0.22 0.03 52 / 4%)',
+          }}
+          onFocus={(e) => {
+            (e.target as HTMLTextAreaElement).style.borderColor = '#D4654A88';
+            (e.target as HTMLTextAreaElement).style.boxShadow = '0 0 0 3px #D4654A18';
+          }}
+          onBlur={(e) => {
+            (e.target as HTMLTextAreaElement).style.borderColor = 'oklch(0.88 0.015 68)';
+            (e.target as HTMLTextAreaElement).style.boxShadow = '0 1px 4px oklch(0.22 0.03 52 / 4%)';
           }}
           onInput={(e) => {
             const target = e.target as HTMLTextAreaElement;
@@ -65,14 +76,14 @@ export default function ChatInput({ spaceId }: ChatInputProps) {
           }}
         />
       </div>
-      <Button
+      <button
         onClick={handleSend}
         disabled={!content.trim() || sending}
-        size="icon"
-        className="w-11 h-11 shrink-0 rounded-xl"
+        className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-white transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+        style={{ background: '#D4654A', boxShadow: '0 2px 8px #D4654A33' }}
       >
         <Send className="w-4 h-4" />
-      </Button>
+      </button>
     </div>
   );
 }

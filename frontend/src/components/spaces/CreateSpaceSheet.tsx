@@ -9,7 +9,6 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -64,15 +63,37 @@ export default function CreateSpaceSheet({ open, onClose }: CreateSpaceSheetProp
     }
   }
 
+  const inputStyle = {
+    background: 'oklch(0.96 0.009 70)',
+    border: '1px solid oklch(0.88 0.015 68)',
+  };
+
+  const labelStyle = { color: 'oklch(0.30 0.04 52)' };
+
   return (
     <Sheet open={open} onOpenChange={onClose}>
       <SheetContent
         side="right"
-        className="w-full sm:max-w-md bg-card border-l border-border flex flex-col gap-0 p-0"
+        className="w-full sm:max-w-md flex flex-col gap-0 p-0"
+        style={{
+          background: '#fff',
+          borderLeft: '1px solid oklch(0.88 0.015 68)',
+        }}
       >
-        <SheetHeader className="px-6 py-5 border-b border-border shrink-0">
-          <SheetTitle className="text-foreground text-lg">New Space</SheetTitle>
-          <SheetDescription className="text-muted-foreground text-sm">
+        <SheetHeader
+          className="px-6 py-5 shrink-0"
+          style={{ borderBottom: '1px solid oklch(0.88 0.015 68)' }}
+        >
+          <SheetTitle
+            className="font-display font-700 text-lg"
+            style={{ color: 'oklch(0.22 0.03 52)', letterSpacing: '-0.01em' }}
+          >
+            New Space
+          </SheetTitle>
+          <SheetDescription
+            className="font-editorial text-sm"
+            style={{ color: 'oklch(0.50 0.025 58)', fontStyle: 'italic' }}
+          >
             A space is a shared workspace for planning an event with your group.
           </SheetDescription>
         </SheetHeader>
@@ -81,20 +102,24 @@ export default function CreateSpaceSheet({ open, onClose }: CreateSpaceSheetProp
           <div className="flex-1 px-6 py-6 space-y-6">
             {/* Emoji picker */}
             <div className="space-y-3">
-              <Label className="text-sm font-medium">Icon</Label>
+              <Label
+                className="font-display font-600 text-sm"
+                style={labelStyle}
+              >
+                Icon
+              </Label>
               <div className="grid grid-cols-9 gap-1.5">
                 {EMOJIS.map((e) => (
                   <button
                     key={e}
                     type="button"
                     onClick={() => setEmoji(e)}
-                    className={`
-                      h-9 w-9 rounded-lg text-xl flex items-center justify-center
-                      transition-all duration-150 hover:scale-110
-                      ${emoji === e
-                        ? 'bg-primary/20 ring-2 ring-primary shadow-sm'
-                        : 'bg-secondary/60 hover:bg-secondary'}
-                    `}
+                    className="h-9 w-9 rounded-lg text-xl flex items-center justify-center transition-all duration-150 hover:scale-110"
+                    style={{
+                      background: emoji === e ? '#FEF3EF' : 'oklch(0.94 0.009 68)',
+                      outline: emoji === e ? '2px solid #D4654A66' : 'none',
+                      outlineOffset: '1px',
+                    }}
                   >
                     {e}
                   </button>
@@ -103,27 +128,35 @@ export default function CreateSpaceSheet({ open, onClose }: CreateSpaceSheetProp
             </div>
 
             {/* Preview banner */}
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-secondary/40 border border-border/50">
+            <div
+              className="flex items-center gap-3 p-4 rounded-2xl"
+              style={{ background: 'oklch(0.96 0.009 70)', border: '1px solid oklch(0.90 0.012 68)' }}
+            >
               <span className="text-3xl leading-none">{emoji}</span>
               <div>
-                <p className="font-semibold text-foreground text-sm">
-                  {name || <span className="text-muted-foreground/60 font-normal">Space name</span>}
+                <p className="font-display font-600 text-sm" style={{ color: 'oklch(0.22 0.03 52)' }}>
+                  {name || <span style={{ color: 'oklch(0.65 0.025 58)', fontWeight: 400 }}>Space name</span>}
                 </p>
                 {description && (
-                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{description}</p>
+                  <p className="font-editorial text-xs mt-0.5 line-clamp-1" style={{ color: 'oklch(0.50 0.025 58)' }}>
+                    {description}
+                  </p>
                 )}
               </div>
             </div>
 
             {/* Name */}
             <div className="space-y-2">
-              <Label htmlFor="sheet-space-name">Name</Label>
+              <Label htmlFor="sheet-space-name" className="font-display font-600 text-sm" style={labelStyle}>
+                Name
+              </Label>
               <Input
                 id="sheet-space-name"
                 placeholder="Summer Road Trip, Birthday Party..."
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="bg-secondary/50 border-border/50 h-11"
+                className="font-display text-sm h-11"
+                style={inputStyle}
                 autoFocus
                 maxLength={60}
               />
@@ -131,16 +164,17 @@ export default function CreateSpaceSheet({ open, onClose }: CreateSpaceSheetProp
 
             {/* Description */}
             <div className="space-y-2">
-              <Label htmlFor="sheet-space-desc">
+              <Label htmlFor="sheet-space-desc" className="font-display font-600 text-sm" style={labelStyle}>
                 Description{' '}
-                <span className="text-muted-foreground font-normal">(optional)</span>
+                <span style={{ color: 'oklch(0.60 0.025 58)', fontWeight: 400 }}>(optional)</span>
               </Label>
               <Textarea
                 id="sheet-space-desc"
                 placeholder="What are you planning?"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="bg-secondary/50 border-border/50 resize-none"
+                className="font-editorial text-sm resize-none"
+                style={inputStyle}
                 rows={3}
                 maxLength={200}
               />
@@ -148,22 +182,30 @@ export default function CreateSpaceSheet({ open, onClose }: CreateSpaceSheetProp
           </div>
 
           {/* Sticky footer */}
-          <div className="px-6 py-4 border-t border-border shrink-0 flex gap-3">
-            <Button
+          <div
+            className="px-6 py-4 shrink-0 flex gap-3"
+            style={{ borderTop: '1px solid oklch(0.88 0.015 68)' }}
+          >
+            <button
               type="button"
-              variant="ghost"
               onClick={onClose}
-              className="flex-1"
+              className="flex-1 h-10 rounded-xl font-display font-500 text-sm transition-all"
+              style={{
+                border: '1px solid oklch(0.88 0.015 68)',
+                color: 'oklch(0.40 0.03 52)',
+                background: '#fff',
+              }}
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
               disabled={!name.trim() || loading}
-              className="flex-1"
+              className="flex-1 h-10 rounded-xl font-display font-600 text-sm text-white transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{ background: '#D4654A', boxShadow: '0 2px 8px #D4654A33' }}
             >
               {loading ? 'Creating…' : 'Create Space'}
-            </Button>
+            </button>
           </div>
         </form>
       </SheetContent>
