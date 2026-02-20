@@ -1,6 +1,6 @@
 # Nexus — Collaborative Event Planning Platform
 
-Nexus is a full-featured collaborative event planning app that combines Pinterest-style visual boards, real-time chat, polls/voting, and a shared calendar into one organized space. Plan trips, parties, and events with your group without switching between apps.
+Nexus is a full-featured collaborative event planning app that combines Pinterest-style visual boards, real-time chat, polls/voting, and a shared calendar into one organized space. Plan trips, parties, and events with your group without switching between apps
 
 ## Tech Stack
 
