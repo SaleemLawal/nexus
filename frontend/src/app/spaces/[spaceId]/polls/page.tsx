@@ -13,7 +13,7 @@ export default function PollsPage() {
   const params = useParams<{ spaceId: string }>();
   const { spaceId } = params;
   const user = useUserStore((s) => s.user);
-  const { polls, fetchPolls, updatePoll } = useSpaceStore();
+  const { polls, fetchPolls, loadingPolls } = useSpaceStore();
   const [showCreate, setShowCreate] = useState(false);
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
@@ -39,7 +39,7 @@ export default function PollsPage() {
 
     channelRef.current = channel;
     return () => { channel.unsubscribe(); };
-  }, [user, spaceId, fetchPolls, updatePoll]);
+  }, [user, spaceId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex-1 overflow-y-auto p-6 max-w-3xl mx-auto w-full">
@@ -57,7 +57,17 @@ export default function PollsPage() {
         </button>
       </div>
 
-      {polls.length === 0 ? (
+      {loadingPolls ? (
+        <div className="space-y-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-32 rounded-2xl animate-pulse"
+              style={{ background: 'oklch(0.93 0.012 72)' }}
+            />
+          ))}
+        </div>
+      ) : polls.length === 0 ? (
         <div
           className="flex flex-col items-center justify-center py-20 text-center rounded-2xl"
           style={{

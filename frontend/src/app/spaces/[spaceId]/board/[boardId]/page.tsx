@@ -16,13 +16,14 @@ export default function BoardPage() {
   const params = useParams<{ spaceId: string; boardId: string }>();
   const { spaceId, boardId } = params;
   const user = useUserStore((s) => s.user);
-  const { fetchPins, setCurrentBoard, addPin } = useSpaceStore();
+  const { fetchPins, setCurrentBoard, clearBoardData } = useSpaceStore();
   const [showCreate, setShowCreate] = useState(false);
   const currentBoard = useSpaceStore((s) => s.currentBoard);
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   useEffect(() => {
     if (!user) return;
+    clearBoardData();
     fetchPins(boardId);
     api.boards.get(boardId).then(setCurrentBoard).catch(console.error);
 
@@ -47,7 +48,7 @@ export default function BoardPage() {
 
     channelRef.current = channel;
     return () => { channel.unsubscribe(); };
-  }, [user, boardId, fetchPins, setCurrentBoard, addPin]);
+  }, [user, boardId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex-1 overflow-y-auto p-6">

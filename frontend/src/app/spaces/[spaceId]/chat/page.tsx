@@ -13,7 +13,7 @@ export default function ChatPage() {
   const params = useParams<{ spaceId: string }>();
   const { spaceId } = params;
   const user = useUserStore((s) => s.user);
-  const { messages, fetchMessages, addMessage } = useSpaceStore();
+  const { messages, fetchMessages, loadingMessages, addMessage } = useSpaceStore();
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   useEffect(() => {
@@ -43,12 +43,26 @@ export default function ChatPage() {
     return () => {
       channel.unsubscribe();
     };
-  }, [user, spaceId, fetchMessages, addMessage]);
+  }, [user, spaceId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
       <div className="flex-1 min-h-0 overflow-hidden">
-        <ChatWindow messages={messages} currentUserId={user?.id} />
+        {loadingMessages ? (
+          <div className="flex flex-col gap-3 p-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className={`flex gap-2 ${i % 3 === 2 ? 'flex-row-reverse' : ''}`}>
+                <div className="w-8 h-8 rounded-full animate-pulse shrink-0" style={{ background: 'oklch(0.88 0.015 68)' }} />
+                <div
+                  className="h-10 rounded-2xl animate-pulse"
+                  style={{ background: 'oklch(0.93 0.012 72)', width: `${120 + (i * 37) % 120}px` }}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <ChatWindow messages={messages} currentUserId={user?.id} />
+        )}
       </div>
       <div className="shrink-0 p-4" style={{ borderTop: '1px solid oklch(0.88 0.015 68)' }}>
         <ChatInput spaceId={spaceId} />

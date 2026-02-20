@@ -12,13 +12,13 @@ export default function CalendarPage() {
   const params = useParams<{ spaceId: string }>();
   const { spaceId } = params;
   const user = useUserStore((s) => s.user);
-  const { events, fetchEvents } = useSpaceStore();
+  const { events, fetchEvents, loadingEvents } = useSpaceStore();
   const [showCreate, setShowCreate] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
   useEffect(() => {
     if (user) fetchEvents(spaceId);
-  }, [user, spaceId, fetchEvents]);
+  }, [user, spaceId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex-1 overflow-y-auto p-6 max-w-5xl mx-auto w-full">
@@ -36,14 +36,18 @@ export default function CalendarPage() {
         </button>
       </div>
 
-      <CalendarView
-        events={events}
-        onAddEvent={(date) => {
-          setSelectedDate(date);
-          setShowCreate(true);
-        }}
-        spaceId={spaceId}
-      />
+      {loadingEvents ? (
+        <div className="rounded-2xl animate-pulse" style={{ height: 480, background: 'oklch(0.93 0.012 72)' }} />
+      ) : (
+        <CalendarView
+          events={events}
+          onAddEvent={(date) => {
+            setSelectedDate(date);
+            setShowCreate(true);
+          }}
+          spaceId={spaceId}
+        />
+      )}
 
       <CreateEventModal
         open={showCreate}

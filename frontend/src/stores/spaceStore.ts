@@ -13,6 +13,15 @@ interface SpaceState {
   messages: Message[];
   events: CalendarEvent[];
   loading: boolean;
+  loadingBoards: boolean;
+  loadingPins: boolean;
+  loadingPolls: boolean;
+  loadingMessages: boolean;
+  loadingEvents: boolean;
+
+  // Navigation helpers
+  clearSpaceData: () => void;
+  clearBoardData: () => void;
 
   // Spaces
   fetchSpaces: () => Promise<void>;
@@ -60,6 +69,31 @@ export const useSpaceStore = create<SpaceState>()((set) => ({
   messages: [],
   events: [],
   loading: false,
+  loadingBoards: false,
+  loadingPins: false,
+  loadingPolls: false,
+  loadingMessages: false,
+  loadingEvents: false,
+
+  clearSpaceData: () =>
+    set({
+      currentSpace: null,
+      boards: [],
+      pins: [],
+      polls: [],
+      messages: [],
+      events: [],
+      members: [],
+      currentBoard: null,
+      loadingBoards: false,
+      loadingPins: false,
+      loadingPolls: false,
+      loadingMessages: false,
+      loadingEvents: false,
+    }),
+
+  clearBoardData: () =>
+    set({ currentBoard: null, pins: [], loadingPins: false }),
 
   fetchSpaces: async () => {
     set({ loading: true });
@@ -75,13 +109,19 @@ export const useSpaceStore = create<SpaceState>()((set) => ({
   addSpace: (space) => set((s) => ({ spaces: [space, ...s.spaces] })),
 
   fetchMembers: async (spaceID) => {
+    set({ members: [] });
     const members = await api.spaces.members(spaceID);
     set({ members: members || [] });
   },
 
   fetchBoards: async (spaceID) => {
-    const boards = await api.boards.list(spaceID);
-    set({ boards: boards || [] });
+    set({ boards: [], loadingBoards: true });
+    try {
+      const boards = await api.boards.list(spaceID);
+      set({ boards: boards || [] });
+    } finally {
+      set({ loadingBoards: false });
+    }
   },
 
   setCurrentBoard: (board) => set({ currentBoard: board }),
@@ -93,8 +133,13 @@ export const useSpaceStore = create<SpaceState>()((set) => ({
     set((s) => ({ boards: s.boards.filter((b) => b.id !== boardID) })),
 
   fetchPins: async (boardID) => {
-    const pins = await api.pins.list(boardID);
-    set({ pins: pins || [] });
+    set({ pins: [], loadingPins: true });
+    try {
+      const pins = await api.pins.list(boardID);
+      set({ pins: pins || [] });
+    } finally {
+      set({ loadingPins: false });
+    }
   },
 
   addPin: (pin) => set((s) => ({ pins: [...s.pins, pin] })),
@@ -105,8 +150,13 @@ export const useSpaceStore = create<SpaceState>()((set) => ({
   setPins: (pins) => set({ pins }),
 
   fetchPolls: async (spaceID) => {
-    const polls = await api.polls.list(spaceID);
-    set({ polls: polls || [] });
+    set({ polls: [], loadingPolls: true });
+    try {
+      const polls = await api.polls.list(spaceID);
+      set({ polls: polls || [] });
+    } finally {
+      set({ loadingPolls: false });
+    }
   },
 
   addPoll: (poll) => set((s) => ({ polls: [poll, ...s.polls] })),
@@ -117,8 +167,13 @@ export const useSpaceStore = create<SpaceState>()((set) => ({
     })),
 
   fetchMessages: async (spaceID) => {
-    const messages = await api.messages.list(spaceID);
-    set({ messages: messages || [] });
+    set({ messages: [], loadingMessages: true });
+    try {
+      const messages = await api.messages.list(spaceID);
+      set({ messages: messages || [] });
+    } finally {
+      set({ loadingMessages: false });
+    }
   },
 
   addMessage: (message) =>
@@ -128,8 +183,13 @@ export const useSpaceStore = create<SpaceState>()((set) => ({
     }),
 
   fetchEvents: async (spaceID) => {
-    const events = await api.events.list(spaceID);
-    set({ events: events || [] });
+    set({ events: [], loadingEvents: true });
+    try {
+      const events = await api.events.list(spaceID);
+      set({ events: events || [] });
+    } finally {
+      set({ loadingEvents: false });
+    }
   },
 
   addEvent: (event) => set((s) => ({ events: [...s.events, event] })),

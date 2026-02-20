@@ -30,7 +30,7 @@ export default function SpaceOverviewPage() {
   const params = useParams<{ spaceId: string }>();
   const spaceId = params.spaceId;
   const user = useUserStore((s) => s.user);
-  const { boards, fetchBoards, loading, fetchEvents, events } = useSpaceStore();
+  const { boards, fetchBoards, loadingBoards, fetchEvents, events } = useSpaceStore();
   const [showCreate, setShowCreate] = useState(false);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function SpaceOverviewPage() {
             </Button>
           </motion.div>
 
-          {loading ? (
+          {loadingBoards ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div
