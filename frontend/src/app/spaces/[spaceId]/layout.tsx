@@ -11,13 +11,14 @@ export default function SpaceLayout({ children }: { children: React.ReactNode })
   const params = useParams<{ spaceId: string }>();
   const spaceId = params.spaceId;
   const user = useUserStore((s) => s.user);
-  const { setCurrentSpace, fetchSpaces, spaces } = useSpaceStore();
+  const { setCurrentSpace, fetchSpaces, spaces, clearSpaceData } = useSpaceStore();
 
   useEffect(() => {
     if (!user) return;
+    clearSpaceData();
     if (spaces.length === 0) fetchSpaces();
     api.spaces.get(spaceId).then(setCurrentSpace).catch(console.error);
-  }, [user, spaceId, setCurrentSpace, fetchSpaces, spaces.length]);
+  }, [user, spaceId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
