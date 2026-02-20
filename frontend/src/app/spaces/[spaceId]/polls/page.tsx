@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Plus, BarChart3 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useUserStore } from '@/stores/userStore';
 import { useSpaceStore } from '@/stores/spaceStore';
 import PollCard from '@/components/polls/PollCard';

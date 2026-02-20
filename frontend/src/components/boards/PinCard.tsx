@@ -97,7 +97,6 @@ export default function PinCard({ pin }: PinCardProps) {
   return (
     <motion.div
       ref={setNodeRef}
-      style={style}
       className="group rounded-2xl overflow-hidden"
       whileHover={{
         y: -2,
@@ -105,7 +104,6 @@ export default function PinCard({ pin }: PinCardProps) {
           '0 6px 20px oklch(0.22 0.03 52 / 10%), 0 16px 40px oklch(0.22 0.03 52 / 8%)',
         transition: { duration: 0.2 },
       }}
-      initial={{ boxShadow: '0 1px 4px oklch(0.22 0.03 52 / 6%), 0 4px 12px oklch(0.22 0.03 52 / 7%)' }}
       style={{
         background: '#fff',
         boxShadow:

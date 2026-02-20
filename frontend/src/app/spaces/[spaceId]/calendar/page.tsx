@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useUserStore } from '@/stores/userStore';
 import { useSpaceStore } from '@/stores/spaceStore';
 import CalendarView from '@/components/calendar/CalendarView';

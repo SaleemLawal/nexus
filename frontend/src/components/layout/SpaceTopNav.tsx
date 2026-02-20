@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Copy, Check, Users } from 'lucide-react';
 import { useSpaceStore } from '@/stores/spaceStore';
-import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import MemberAvatars from '@/components/spaces/MemberAvatars';
 import PresenceIndicator from './PresenceIndicator';
