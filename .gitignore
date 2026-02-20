@@ -3,8 +3,6 @@
 # frontend
 frontend/.next/
 frontend/node_modules/
-frontend/package-lock.json
-
 # dependencies
 frontend/.pnp
 frontend/.pnp.*
