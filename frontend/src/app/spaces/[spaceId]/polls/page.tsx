@@ -9,7 +9,6 @@ import { useSpaceStore } from '@/stores/spaceStore';
 import PollCard from '@/components/polls/PollCard';
 import CreatePollModal from '@/components/polls/CreatePollModal';
 import { supabase } from '@/lib/supabase';
-import type { Poll } from '@/types';
 
 export default function PollsPage() {
   const params = useParams<{ spaceId: string }>();

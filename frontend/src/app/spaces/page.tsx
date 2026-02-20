@@ -12,16 +12,14 @@ import JoinSpaceModal from '@/components/spaces/JoinSpaceModal';
 export default function SpacesPage() {
   const spaces = useSpaceStore((s) => s.spaces);
   const loading = useSpaceStore((s) => s.loading);
-  const [showCreate, setShowCreate] = useState(false);
-  const [showJoin, setShowJoin] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [showCreate, setShowCreate] = useState(() => searchParams.get('new') === '1');
+  const [showJoin, setShowJoin] = useState(false);
 
-  // Auto-open the create sheet when ?new=1 is in the URL
+  // Clean the ?new=1 query param without a navigation flash
   useEffect(() => {
     if (searchParams.get('new') === '1') {
-      setShowCreate(true);
-      // Clean the query param without a navigation flash
       router.replace('/spaces', { scroll: false });
     }
   }, [searchParams, router]);
